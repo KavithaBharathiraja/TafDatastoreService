@@ -10,6 +10,7 @@ import com.example.TafDatastoreService.Service.Interfaces.TafDatastoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,7 +57,6 @@ public class TafDatastoreServiceImpl implements TafDatastoreService {
     }
 
 
-
     @Override
     public Flight getFlightById(Long flightId) {
         return flightRepository.findById(flightId).orElse(null);
@@ -86,9 +86,23 @@ public class TafDatastoreServiceImpl implements TafDatastoreService {
     // CRUD operations for Booking
     @Override
     public Booking createBooking(Booking booking) {
+        // Fetch User and Flight from the database
+        User user = userRepository.findById(booking.getUser().getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Flight flight = flightRepository.findById(booking.getFlight().getId())
+                .orElseThrow(() -> new RuntimeException("Flight not found"));
+
+        // Set the correct user and flight objects
+        booking.setUser(user);
+        booking.setFlight(flight);
+
+        // Set timestamps (if not set automatically)
+        booking.setCreatedAt(LocalDateTime.now());
+        booking.setUpdatedAt(LocalDateTime.now());
+
+        // Save and return the booking
         return bookingRepository.save(booking);
     }
-
 
     @Override
     public List<Booking> getAllAvailableBookings() {
@@ -119,5 +133,10 @@ public class TafDatastoreServiceImpl implements TafDatastoreService {
     @Override
     public List<Booking> getBookingsByFlightId(Long flightId) {
         return bookingRepository.findByFlightId(flightId);  // Assuming this method exists in the BookingRepository
+    }
+
+    @Override
+    public List<Booking> getBookingsByUserId(Long userId) {
+        return bookingRepository.findByUserId(userId);
     }
 }

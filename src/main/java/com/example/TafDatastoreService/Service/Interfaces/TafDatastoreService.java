@@ -24,6 +24,7 @@ public interface TafDatastoreService {
 
     Booking createBooking(Booking booking);
     List<Booking> getBookingsByFlightId(Long flightId);
+    List<Booking> getBookingsByUserId(Long userId);
     List<Booking> getAllAvailableBookings();
     Booking getBooking(Long bookingId);
     Booking updateBooking (Long bookingId, Booking booking);

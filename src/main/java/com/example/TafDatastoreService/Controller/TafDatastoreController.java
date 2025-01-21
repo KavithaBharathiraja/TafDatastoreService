@@ -3,6 +3,7 @@ package com.example.TafDatastoreService.Controller;
 import com.example.TafDatastoreService.Models.Booking;
 import com.example.TafDatastoreService.Models.Flight;
 import com.example.TafDatastoreService.Models.User;
+
 import com.example.TafDatastoreService.Service.TafDatastoreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -88,6 +89,10 @@ public class TafDatastoreController {
     @DeleteMapping("/bookings/{bookingId}")
     public void deleteBooking(@PathVariable Long bookingId) {
         datastoreService.deleteBooking(bookingId);
+    }
+    @GetMapping("/bookings/users/{userId}")
+    public List<Booking> getBookingsByUserId(@PathVariable Long userId) {
+        return datastoreService.getBookingsByUserId(userId);
     }
 
     @GetMapping("/bookings/flight/{flightId}")
